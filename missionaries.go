@@ -17,7 +17,7 @@ type position struct {
 // Is this a legal position? In particular, does it have
 // more cannibals than missionaries on either bank? Because that is illegal.
 func valid(pos position) bool {
-	fmt.Println(pos.westMissionaries)
+	//fmt.Println(pos.westMissionaries)
 	if pos.westMissionaries > 3 || pos.westCannibals > 3 || pos.eastMissionaries > 3 || pos.eastCannibals > 3{
 		return false
 	}
@@ -68,14 +68,35 @@ func (pos position) successors() []position {
 			}
 		}
 	}
-	fmt.Println()
+	//fmt.Println()
 	return temp
 }
 
 // A recursive depth-first search that goes through to find the goal and returns the path to get there
 // Returns nil if no solution found
 func dfs(start position, goal position, solution []position, visited map[position]bool) []position {
-	// YOUR CODE GOES HERE
+	// Check if start position == goal
+	if start == goal {
+		return solution
+	}
+	// Get all successors
+	for possible := start.successors(); len(possible) > 0; {
+		// If not visted -> Do next thing
+		choice := possible[0]
+		if !visited[choice]{
+			//fmt.Println(possible)
+			temp_solution := append(solution, choice)
+			visited[choice] = true
+			anwser := dfs(choice, goal, temp_solution, visited)
+			if anwser != nil{
+				return anwser
+
+			}
+		}
+		possible = possible[1:]
+	}
+	// If naw, return fam
+	return nil
 }
 
 func main() {

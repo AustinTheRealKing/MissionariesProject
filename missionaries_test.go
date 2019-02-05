@@ -151,3 +151,37 @@ func TestSuccessors5(t *testing.T) {
 		t.Errorf("Test failed: got %v but expected %v", actual, expected)
 	}
 }
+
+// Test DFS
+func TestDFS(t *testing.T) {
+	start := position{boatOnWestBank: true, westMissionaries: 3, westCannibals: 3, eastMissionaries: 0, eastCannibals: 0}
+	goal := position{boatOnWestBank: false, westMissionaries: 0, westCannibals: 0, eastMissionaries: 3, eastCannibals: 3}
+	solution := dfs(start, goal, []position{start}, make(map[position]bool))
+
+	if solution[0] != start {
+		t.Errorf("Test failed: solution[0]: %v is not the start position: %v",
+			solution[0], goal)
+		return
+	}
+
+	if solution[len(solution)-1] != goal {
+		t.Errorf("Test failed: solution[len(solution) - 1]: %v is not the goal position: %v",
+			solution[len(solution)-1], goal)
+		return
+	}
+
+	for i, pos := range solution {
+		if !valid(pos) {
+			t.Errorf("Test failed: solution[%d]: %v is not valid", i, solution[i])
+			return
+		}
+	}
+
+	for i := 0; i < len(solution)-1; i++ {
+		if !contains(solution[i].successors(), solution[i+1]) {
+			t.Errorf("Test failed: solution[%d]: %v is not a successor of solution[%d]: %v",
+				i+1, solution[i+1], i, solution[i])
+			return
+		}
+	}
+}
