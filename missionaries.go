@@ -17,7 +17,6 @@ type position struct {
 // Is this a legal position? In particular, does it have
 // more cannibals than missionaries on either bank? Because that is illegal.
 func valid(pos position) bool {
-	//fmt.Println(pos.westMissionaries)
 	if pos.westMissionaries > 3 || pos.westCannibals > 3 || pos.eastMissionaries > 3 || pos.eastCannibals > 3{
 		return false
 	}
@@ -50,12 +49,14 @@ func (pos position) successors() []position {
 			if i+j <= 2 && i+j != 0 {
 				test := pos
 				if pos.boatOnWestBank == true {
+					//test for all options if boat is not on west bank
 					test.eastMissionaries += i
 					test.westMissionaries -= i
 					test.eastCannibals += j
 					test.westCannibals -= j
 					test.boatOnWestBank = false
 				} else {
+					//test for all options if boat is on west bank
 					test.westMissionaries += i
 					test.eastMissionaries -= i
 					test.westCannibals += j
@@ -68,7 +69,6 @@ func (pos position) successors() []position {
 			}
 		}
 	}
-	//fmt.Println()
 	return temp
 }
 
